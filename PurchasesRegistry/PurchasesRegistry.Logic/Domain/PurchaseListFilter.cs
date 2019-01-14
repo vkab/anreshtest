@@ -6,5 +6,8 @@ namespace PurchasesRegistry.Logic.Domain
 {
 	public sealed class PurchaseListFilter
 	{
+		public Guid UserId { get; set; }
+		public int? PageNumber { get; set; }
+		public int? PageSize { get; set; }
 	}
 }

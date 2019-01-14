@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PurchasesRegistry.DAL;
+using Microsoft.EntityFrameworkCore.Design;
+using PurchasesRegistry.DAL.Models;
 
 namespace PurchasesRegistry
 {
@@ -19,28 +21,27 @@ namespace PurchasesRegistry
 	{
 		public Startup(IConfiguration configuration)
 		{
+			new PurchasesDbContext().Database.Migrate();
 			Configuration = configuration;
 		}
 
 		public IConfiguration Configuration { get; }
-
-		// This method gets called by the runtime. Use this method to add services to the container.
+		
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
-			
-			services.AddDefaultIdentity<IdentityUser>()
+
+			services.AddDbContext<PurchasesDbContext>();
+			services.AddIdentity<PurchaseIdentityUser, IdentityRole>()
 				.AddEntityFrameworkStores<PurchasesDbContext>();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -67,5 +68,11 @@ namespace PurchasesRegistry
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
 		}
+	}
+
+	public class PurchaseDbContextFactory : IDesignTimeDbContextFactory<PurchasesDbContext>
+	{
+		public PurchasesDbContext CreateDbContext(string[] args)
+		=> new PurchasesDbContext("PurchasesRegistry");
 	}
 }

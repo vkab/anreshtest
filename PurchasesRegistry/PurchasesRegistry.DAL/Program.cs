@@ -7,8 +7,6 @@ namespace PurchasesRegistry.DAL
 	public class Program
 	{
 		static int Main(params string[] args)
-		{
-			return 0;
-		}
+		=> 0;
 	}
 }

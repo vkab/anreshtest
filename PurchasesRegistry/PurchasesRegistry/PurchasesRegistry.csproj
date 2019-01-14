@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PurchasesRegistry.DAL\PurchasesRegistry.DAL.csproj" />
+    <ProjectReference Include="..\PurchasesRegistry.Logic\PurchasesRegistry.Logic.csproj" />
   </ItemGroup>
 
 </Project>

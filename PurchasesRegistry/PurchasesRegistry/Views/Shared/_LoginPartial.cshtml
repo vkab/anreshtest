@@ -1,7 +1,8 @@
 @using Microsoft.AspNetCore.Identity
+@using PurchasesRegistry.DAL.Models;
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<PurchaseIdentityUser> SignInManager
+@inject UserManager<PurchaseIdentityUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

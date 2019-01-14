@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PurchasesRegistry.Logic.Domain;
 using PurchasesRegistry.Models;
 
 namespace PurchasesRegistry.Controllers
@@ -18,7 +19,7 @@ namespace PurchasesRegistry.Controllers
 		public IActionResult Contact()
 		{
 			ViewData["Message"] = "Your contact page.";
-
+			
 			return View();
 		}
 
