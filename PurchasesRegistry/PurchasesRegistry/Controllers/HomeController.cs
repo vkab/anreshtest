@@ -25,7 +25,7 @@ namespace PurchasesRegistry.Controllers
 			_userStore = userStore;
 		}
 
-		public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 20)
+		public async Task<IActionResult> Index([FromQuery]int pageNumber = 1, [FromQuery]int pageSize = 20)
 		{
 			var user = await _userStore
 				.FindByNameAsync(User.Identity.Name.ToUpper(), default)

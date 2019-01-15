@@ -30,13 +30,13 @@
 		</table>
 		var paramsDict = new Dictionary<string, string>()
 		{
-			{"pageNumber", Model.Purchases.PageNumber.ToString() },
 			{"pageSize", Model.Purchases.PageSize.ToString() },
 		};
 		<pager class="pager-container"
 		list="@Model.Purchases"
-		options="@PagedListRenderOptions.Classic"
+		options="@PagedListRenderOptions.ClassicPlusFirstAndLast"
 		asp-action="Index"
+		param-page-number="pageNumber"
 		asp-all-route-data="@paramsDict"
 		asp-controller="Home" />
 	}

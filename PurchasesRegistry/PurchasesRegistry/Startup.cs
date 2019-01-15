@@ -74,7 +74,7 @@ namespace PurchasesRegistry
 			{
 				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{pageNumber?}/{pageSize?}");
+					template: "{controller=Home}/{action=Index}");
 			});
 		}
 	}
