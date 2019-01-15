@@ -8,6 +8,6 @@ namespace PurchasesRegistry.Logic
 {
 	public interface IPurchaseWriter
 	{
-		Task SavePurchase(PurchaseInfo purchase);
+		Task SavePurchaseAsync(PurchaseInfo purchase);
 	}
 }

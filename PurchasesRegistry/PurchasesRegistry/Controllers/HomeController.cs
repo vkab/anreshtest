@@ -17,11 +17,16 @@ namespace PurchasesRegistry.Controllers
 	public class HomeController : Controller
 	{
 		private readonly IPurchaseReader _purchaseReader;
+		private readonly IPurchaseWriter _purchaseWriter;
 		private readonly IUserStore<PurchaseIdentityUser> _userStore;
 
-		public HomeController(IPurchaseReader purchaseReader, IUserStore<PurchaseIdentityUser> userStore)
+		public HomeController(
+			IPurchaseReader purchaseReader, 
+			IPurchaseWriter purchaseWriter,
+			IUserStore<PurchaseIdentityUser> userStore)
 		{
 			_purchaseReader = purchaseReader;
+			_purchaseWriter = purchaseWriter;
 			_userStore = userStore;
 		}
 
@@ -40,7 +45,53 @@ namespace PurchasesRegistry.Controllers
 
 			return View(new PurchaseListViewModel(purchases.Items, pageNumber, pageSize, purchases.TotalItems));
 		}
-		
+
+		[Route("{Id}")]
+		public async Task<IActionResult> Details(int id)
+		{
+			if(id > 0)
+			{
+				var user = await _userStore
+				   .FindByNameAsync(User.Identity.Name.ToUpper(), default)
+				   .ConfigureAwait(false);
+
+				var item = await _purchaseReader
+					.GetPurchaseAsync(id, user.Id)
+					.ConfigureAwait(false);
+
+				return View(new PurchaseViewModel(item));
+			}
+			else
+			{
+				return View(new PurchaseViewModel());
+			}
+		}
+
+
+
+		[HttpPost]
+		public async Task<IActionResult> Save(PurchaseViewModel data)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _userStore
+					  .FindByNameAsync(User.Identity.Name.ToUpper(), default)
+					  .ConfigureAwait(false);
+
+				var domainModel = data.ToPurchaseInfo(user.Id);
+
+				await _purchaseWriter.SavePurchaseAsync(domainModel)
+					.ConfigureAwait(false);
+
+				return RedirectToAction(nameof(HomeController.Index));
+			}
+			else
+			{
+				return View(nameof(HomeController.Details), data);
+			}
+		}
+
+
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{

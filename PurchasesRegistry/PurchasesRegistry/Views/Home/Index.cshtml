@@ -7,41 +7,57 @@
 }
 
 <div id="purchaseList">
-	@if (Model.Purchases.Any())
-	{
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">№</th>
-					<th scope="col">Наименование заказа</th>
-					<th scope="col">Дата создания</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model.Purchases)
-				{
-					<tr>
-						<th scope="row">@item.Id</th>
-						<td>@item.Name</td>
-						<td>@item.CreationDate.ToShortDateString()</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-		var paramsDict = new Dictionary<string, string>()
+	@{var addItemParamsDict = new Dictionary<string, string>()
+		{{"id","0"}};
+	}
+		<a asp-controller="Home" asp-action="Details" class="btn btn-link" asp-all-route-data="@addItemParamsDict">Добавить</a>
+		@if (Model.Purchases.Any())
 		{
-			{"pageSize", Model.Purchases.PageSize.ToString() },
-		};
-		<pager class="pager-container"
-		list="@Model.Purchases"
-		options="@PagedListRenderOptions.ClassicPlusFirstAndLast"
-		asp-action="Index"
-		param-page-number="pageNumber"
-		asp-all-route-data="@paramsDict"
-		asp-controller="Home" />
-	}
-	else
+			<style type="text/css">
+				#purchaseList a .row {
+					cursor: pointer;
+					margin-bottom: 0px;
+					padding-top: 6px;
+					padding-bottom: 6px;
+				}
+
+				#purchaseList a:nth-child(odd) .row {
+					background-color: #fafafa;
+				}
+			</style>
+			@foreach (var item in Model.Purchases)
+			{
+				var detailsParamsDict = new Dictionary<string, string>()
 	{
-		<p class="info">На данный момент закупок нет.</p>
-	}
+		{
+			"id", item.Id.ToString()
+		}
+	};
+
+	<a asp-controller="Home"
+	   asp-action="Details"
+	   asp-all-route-data="@detailsParamsDict">
+		<dl class="row">
+			<dt class="col-sm-1">@item.Id</dt>
+			<dd class="col-sm-8">@item.Name</dd>
+			<dd class="col-sm-3">@item.CreationDate.ToShortDateString()</dd>
+		</dl>
+	</a>
+}
+			var paramsDict = new Dictionary<string, string>()
+{
+{"pageSize", Model.Purchases.PageSize.ToString() },
+};
+<pager class="pager-container"
+	   list="@Model.Purchases"
+	   options="@PagedListRenderOptions.ClassicPlusFirstAndLast"
+	   asp-action="Index"
+	   param-page-number="pageNumber"
+	   asp-all-route-data="@paramsDict"
+	   asp-controller="Home" />
+}
+else
+{
+<p class="info">На данный момент закупок нет.</p>
+}
 </div>

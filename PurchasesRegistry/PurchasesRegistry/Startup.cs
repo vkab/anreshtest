@@ -26,7 +26,11 @@ namespace PurchasesRegistry
 		public Startup(IConfiguration configuration)
 		{
 			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
-			new PurchasesDbContext().Database.Migrate();
+			using (var context = new PurchasesDbContext())
+			{
+				context.Database.EnsureCreated();
+				context.Database.Migrate();
+			}
 			Configuration = configuration;
 		}
 
@@ -46,8 +50,9 @@ namespace PurchasesRegistry
 				.AddDefaultUI(UIFramework.Bootstrap4)
 				.AddEntityFrameworkStores<PurchasesDbContext>();
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+			
 			services.AddTransient<IPurchaseReader, PurchaseReader>();
+			services.AddTransient<IPurchaseWriter, PurchaseWriter>();
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 		}
 

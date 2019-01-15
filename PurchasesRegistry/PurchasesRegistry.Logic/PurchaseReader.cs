@@ -13,45 +13,51 @@ namespace PurchasesRegistry.Logic
 {
 	public sealed class PurchaseReader : IPurchaseReader
 	{
-		public async Task<PurchaseInfo> GetPurchaseAsync(int id)
-		=> await ServiceProviderFactory.Provider
-				.GetService<PurchasesDbContext>()
-				.Purchases
-				.Where(i => i.Id == id)
-				.Select(i => new PurchaseInfo
-				{
-					CreationDate = i.CreationDate,
-					Id = i.Id,
-					Name = i.Name,
-					Amount = i.Amount,
-					Description = i.Description,
-					OwnerUserId = i.UserId
-				})
-				.SingleAsync()
-				.ConfigureAwait(false);
+		public async Task<PurchaseInfo> GetPurchaseAsync(int id, string userId)
+		{
+			using (var context = ServiceProviderFactory.Provider.GetService<PurchasesDbContext>())
+			{
+				return await context.Purchases
+				   .Where(i => i.Id == id && i.UserId == userId)
+				   .Select(i => new PurchaseInfo
+				   {
+					   CreationDate = i.CreationDate,
+					   Id = i.Id,
+					   Name = i.Name,
+					   Amount = i.Amount,
+					   Description = i.Description,
+					   OwnerUserId = i.UserId
+				   })
+				   .SingleAsync()
+				   .ConfigureAwait(false);
+			}
+		}
 
 		public async Task<PurchaseList> GetPurchasesAsync(PurchaseListFilter filter)
 		{
-			var resultQuery = ServiceProviderFactory.Provider
-				  .GetService<PurchasesDbContext>()
-				  .Purchases
-				  .Where(i => i.UserId == filter.UserId);
-
-			return new PurchaseList
+			using (var context = ServiceProviderFactory.Provider.GetService<PurchasesDbContext>())
 			{
-				Items = await resultQuery
-					  .Select(i => new PurchaseList.PurchaseListItem
-					  {
-						  CreationDate = i.CreationDate,
-						  Id = i.Id,
-						  Name = i.Name
-					  })
-					  .Skip(filter.PageNumber * filter.PageSize)
-					  .Take(filter.PageSize)
-					  .ToListAsync()
-					  .ConfigureAwait(false),
-				TotalItems = resultQuery.Count()
-			};
+				var resultQuery =
+					context
+					  .Purchases
+					  .Where(i => i.UserId == filter.UserId);
+
+				return new PurchaseList
+				{
+					Items = await resultQuery
+						  .Select(i => new PurchaseList.PurchaseListItem
+						  {
+							  CreationDate = i.CreationDate,
+							  Id = i.Id,
+							  Name = i.Name
+						  })
+						  .Skip(filter.PageNumber * filter.PageSize)
+						  .Take(filter.PageSize)
+						  .ToListAsync()
+						  .ConfigureAwait(false),
+					TotalItems = resultQuery.Count()
+				};
+			}
 		}
 	}
 }
