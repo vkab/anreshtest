@@ -143,6 +143,7 @@ namespace PurchasesRegistry.Migrations
                         .HasMaxLength(2048);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<string>("UserId")

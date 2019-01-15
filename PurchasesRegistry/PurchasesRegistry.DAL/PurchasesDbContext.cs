@@ -71,7 +71,8 @@ namespace PurchasesRegistry.DAL
 						.IsRequired();
 					
 					e.Property(i => i.Name)
-						.HasMaxLength(256);
+						.HasMaxLength(256)
+						.IsRequired(true);
 
 					e.Property(i => i.Description)
 						.HasMaxLength(2048)

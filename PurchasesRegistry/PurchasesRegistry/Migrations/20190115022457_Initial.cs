@@ -160,7 +160,7 @@ namespace PurchasesRegistry.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 2048, nullable: true),
                     Amount = table.Column<decimal>(nullable: false)

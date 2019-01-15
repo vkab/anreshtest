@@ -10,7 +10,7 @@ using PurchasesRegistry.DAL;
 namespace PurchasesRegistry.Migrations
 {
     [DbContext(typeof(PurchasesDbContext))]
-    [Migration("20190115021949_Initial")]
+    [Migration("20190115022457_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,7 @@ namespace PurchasesRegistry.Migrations
                         .HasMaxLength(2048);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(256);
 
                     b.Property<string>("UserId")
