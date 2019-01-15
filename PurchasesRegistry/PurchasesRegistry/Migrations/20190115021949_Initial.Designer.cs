@@ -10,8 +10,8 @@ using PurchasesRegistry.DAL;
 namespace PurchasesRegistry.Migrations
 {
     [DbContext(typeof(PurchasesDbContext))]
-    [Migration("20190114231905_initial")]
-    partial class initial
+    [Migration("20190115021949_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

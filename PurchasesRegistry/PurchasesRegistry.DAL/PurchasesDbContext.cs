@@ -14,6 +14,8 @@ namespace PurchasesRegistry.DAL
 	public class PurchasesDbContext : IdentityDbContext<PurchaseIdentityUser, IdentityRole, string>
 	{
 		#region Constructors
+		//Support all initialization scenarios
+
 		public PurchasesDbContext(DbContextOptions options) : base(options)
 		{ }
 
@@ -67,12 +69,13 @@ namespace PurchasesRegistry.DAL
 						.HasForeignKey(i => i.UserId)
 						.OnDelete(DeleteBehavior.Restrict)
 						.IsRequired();
-
+					
 					e.Property(i => i.Name)
 						.HasMaxLength(256);
 
 					e.Property(i => i.Description)
-						.HasMaxLength(2048);
+						.HasMaxLength(2048)
+						.IsRequired(false);
 				});
 		}
 		#endregion

@@ -14,6 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PurchasesRegistry.DAL;
 using Microsoft.EntityFrameworkCore.Design;
 using PurchasesRegistry.DAL.Models;
+using Microsoft.AspNetCore.Identity.UI;
+using PurchasesRegistry.Logic;
+using System.Globalization;
 
 namespace PurchasesRegistry
 {
@@ -21,6 +24,7 @@ namespace PurchasesRegistry
 	{
 		public Startup(IConfiguration configuration)
 		{
+			CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
 			new PurchasesDbContext().Database.Migrate();
 			Configuration = configuration;
 		}
@@ -36,10 +40,13 @@ namespace PurchasesRegistry
 			});
 
 			services.AddDbContext<PurchasesDbContext>();
-			services.AddIdentity<PurchaseIdentityUser, IdentityRole>()
-				.AddEntityFrameworkStores<PurchasesDbContext>();
 
+			services.AddDefaultIdentity<PurchaseIdentityUser>()
+				.AddDefaultUI(UIFramework.Bootstrap4)
+				.AddEntityFrameworkStores<PurchasesDbContext>();
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+			services.AddTransient<IPurchaseReader, PurchaseReader>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -65,7 +72,7 @@ namespace PurchasesRegistry
 			{
 				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					template: "{controller=Home}/{action=Index}/{pageNumber?}/{pageSize?}");
 			});
 		}
 	}

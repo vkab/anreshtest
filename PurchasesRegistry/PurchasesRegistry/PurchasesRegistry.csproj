@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-PurchasesRegistry-BCEABCF4-D07D-463D-83EB-3C9AC7E38D3B</UserSecretsId>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PurchasesRegistry.DAL\PurchasesRegistry.DAL.csproj" />
     <ProjectReference Include="..\PurchasesRegistry.Logic\PurchasesRegistry.Logic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>
