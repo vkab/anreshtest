@@ -30,20 +30,28 @@ namespace PurchasesRegistry.Logic
 				.SingleAsync()
 				.ConfigureAwait(false);
 
-		public async Task<IEnumerable<PurchaseListItem>> GetPurchasesAsync(PurchaseListFilter filter)
-		=> await ServiceProviderFactory.Provider
-				.GetService<PurchasesDbContext>()
-				.Purchases
-				.Where(i => i.UserId == filter.UserId)
-				.Skip(filter.PageNumber * filter.PageSize)
-				.Take(filter.PageSize)
-				.Select(i => new PurchaseListItem
-				{
-					CreationDate = i.CreationDate,
-					Id = i.Id,
-					Name = i.Name
-				})
-				.ToListAsync()
-				.ConfigureAwait(false);
+		public async Task<PurchaseList> GetPurchasesAsync(PurchaseListFilter filter)
+		{
+			var resultQuery = ServiceProviderFactory.Provider
+				  .GetService<PurchasesDbContext>()
+				  .Purchases
+				  .Where(i => i.UserId == filter.UserId);
+
+			return new PurchaseList
+			{
+				Items = await resultQuery
+					  .Select(i => new PurchaseList.PurchaseListItem
+					  {
+						  CreationDate = i.CreationDate,
+						  Id = i.Id,
+						  Name = i.Name
+					  })
+					  .Skip(filter.PageNumber * filter.PageSize)
+					  .Take(filter.PageSize)
+					  .ToListAsync()
+					  .ConfigureAwait(false),
+				TotalItems = resultQuery.Count()
+			};
+		}
 	}
 }

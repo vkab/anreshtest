@@ -25,17 +25,20 @@ namespace PurchasesRegistry.Controllers
 			_userStore = userStore;
 		}
 
-		public async Task<IActionResult> Index(int? pageNumber = null, int? pageSize = null)
+		public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 20)
 		{
 			var user = await _userStore
 				.FindByNameAsync(User.Identity.Name.ToUpper(), default)
 				.ConfigureAwait(false);
-
+			
 			var purchases = await _purchaseReader
-				.GetPurchasesAsync(new PurchaseListFilter { PageNumber = pageNumber ?? 0, PageSize = pageSize ?? 20, UserId = user.Id })
+				.GetPurchasesAsync(new PurchaseListFilter {
+					PageNumber = pageNumber - 1,
+					PageSize = pageSize,
+					UserId = user.Id })
 				.ConfigureAwait(false);
 
-			return View(new PurchaseListViewModel(purchases));
+			return View(new PurchaseListViewModel(purchases.Items, pageNumber, pageSize, purchases.TotalItems));
 		}
 		
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

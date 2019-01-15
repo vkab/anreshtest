@@ -9,6 +9,6 @@ namespace PurchasesRegistry.Logic
 	public interface IPurchaseReader
 	{
 		Task<PurchaseInfo> GetPurchaseAsync(int id);
-		Task<IEnumerable<PurchaseListItem>> GetPurchasesAsync(PurchaseListFilter filter);
+		Task<PurchaseList> GetPurchasesAsync(PurchaseListFilter filter);
 	}
 }

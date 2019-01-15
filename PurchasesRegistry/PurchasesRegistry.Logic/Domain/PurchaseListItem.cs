@@ -4,10 +4,16 @@ using System.Text;
 
 namespace PurchasesRegistry.Logic.Domain
 {
-	public class PurchaseListItem
+	public class PurchaseList
 	{
-		public int Id { get; set; }
-		public string Name { get; set; }
-		public DateTime CreationDate { get; set; }
+		public IEnumerable<PurchaseListItem> Items { get; set; }
+		public int TotalItems { get; set; }
+
+		public class PurchaseListItem
+		{
+			public int Id { get; set; }
+			public string Name { get; set; }
+			public DateTime CreationDate { get; set; }
+		}
 	}
 }

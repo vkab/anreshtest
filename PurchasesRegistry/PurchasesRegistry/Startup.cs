@@ -17,6 +17,7 @@ using PurchasesRegistry.DAL.Models;
 using Microsoft.AspNetCore.Identity.UI;
 using PurchasesRegistry.Logic;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace PurchasesRegistry
 {
@@ -47,6 +48,7 @@ namespace PurchasesRegistry
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			services.AddTransient<IPurchaseReader, PurchaseReader>();
+			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

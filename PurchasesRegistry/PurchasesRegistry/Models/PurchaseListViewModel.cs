@@ -7,18 +7,20 @@ namespace PurchasesRegistry.Models
 {
 	public class PurchaseListViewModel
 	{
-		public PurchaseListViewModel(IEnumerable<Logic.Domain.PurchaseListItem> source)
+		public PurchaseListViewModel(
+			IEnumerable<Logic.Domain.PurchaseList.PurchaseListItem> source, 
+			int pageNum, int pageSize, int totalInDb)
 		{
-			Purchases = source
+			Purchases = new PagedList.Core.StaticPagedList<PurchaseItem>(source
 				.Select(i => new PurchaseItem
 				{
 					CreationDate = i.CreationDate,
 					Id = i.Id,
 					Name = i.Name
-				}).ToList();
+				}), pageNum, pageSize, totalInDb);
 		}
 
-		public IEnumerable<PurchaseItem> Purchases { get; set; }
+		public PagedList.Core.StaticPagedList<PurchaseItem> Purchases { get; set; }
 
 		public class PurchaseItem
 		{
